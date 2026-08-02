@@ -45,12 +45,10 @@ python examples/basic_order.py
 
 ## Getting started with contributing to this repo
 
-1. Download `Poetry`: https://python-poetry.org/. 
-   - Note that in the install script you might have to set `symlinks=True` in `venv.EnvBuilder`.
-   - Note that Poetry v2 is not supported, so you'll need to specify a specific version e.g. curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.4.1 python3 - 
+1. Download `uv`: https://docs.astral.sh/uv/getting-started/installation/.
 
-2. Point poetry to correct version of python. For development we require python 3.10 exactly. Some dependencies have issues on 3.11, while older versions don't have correct typing support.
-`brew install python@3.10 && poetry env use /opt/homebrew/Cellar/python@3.10/3.10.16/bin/python3.10`
+2. Point uv to correct version of python. For development we require python 3.10 exactly. Some dependencies have issues on 3.11, while older versions don't have correct typing support.
+`brew install python@3.10 && uv python pin 3.10`
 
 3. Install dependencies:
 
@@ -65,12 +63,12 @@ CLI commands for faster development. See `make help` for more details.
 ```bash
 check-safety          Run safety checks on dependencies
 cleanup               Cleanup project
-install               Install dependencies from poetry.lock
+install               Install dependencies from uv.lock
 install-types         Find and install additional types for mypy
 lint                  Alias for the pre-commit target
-lockfile-update       Update poetry.lock
-lockfile-update-full  Fully regenerate poetry.lock
-poetry-download       Download and install poetry
+lockfile-update       Update uv.lock
+lockfile-update-full  Fully regenerate uv.lock
+uv-download           Download and install uv
 pre-commit            Run linters + formatters via pre-commit, run "make pre-commit hook=black" to run only black
 test                  Run tests with pytest
 update-dev-deps       Update development dependencies to latest versions
@@ -97,10 +95,10 @@ We follow the [Semantic Versions](https://semver.org/) specification and use [`R
 
 Building a new version of the application contains steps:
 
-- Bump the version of your package with `poetry version <version>`. You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. For more details, refer to the [Semantic Versions](https://semver.org/) standard.
+- Bump the version of your package with `uv version <version>`. You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. For more details, refer to the [Semantic Versions](https://semver.org/) standard.
 - Make a commit to `GitHub`
 - Create a `GitHub release`
-- `poetry publish --build`
+- `uv build && uv publish`
 
 ## License
 

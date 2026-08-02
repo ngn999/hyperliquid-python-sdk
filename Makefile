@@ -4,35 +4,35 @@ SHELL := /usr/bin/env bash -o pipefail -o errexit
 help:
 	@@grep -h '^[a-zA-Z]' $(MAKEFILE_LIST) | awk -F ':.*?## ' 'NF==2 {printf "   %-22s%s\n", $$1, $$2}' | sort
 
-lockfile-update:	## Update poetry.lock
-	poetry lock -n
+lockfile-update:	## Update uv.lock
+	uv lock
 
-lockfile-update-full:	## Fully regenerate poetry.lock
-	poetry lock -n --regenerate
+lockfile-update-full:	## Fully regenerate uv.lock
+	uv lock --upgrade
 
-install:	## Install dependencies from poetry.lock
-	poetry install -n
+install:	## Install dependencies from uv.lock
+	uv sync --frozen
 
 install-types:	## Find and install additional types for mypy
-	poetry run mypy --install-types --non-interactive ./
+	uv run mypy --install-types --non-interactive ./
 
-poetry-download:	## Download and install poetry
-	curl -sSL https://install.python-poetry.org | python -
+uv-download:	## Download and install uv
+	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 lint: pre-commit	## Alias for the pre-commit target
 
 pre-commit:  ## Run linters + formatters via pre-commit, run "make pre-commit hook=black" to run only black
-	poetry run pre-commit run --all-files --verbose --show-diff-on-failure --color always $(hook)
+	uv run pre-commit run --all-files --verbose --show-diff-on-failure --color always $(hook)
 
 test:	## Run tests with pytest
-	poetry run pytest -c pyproject.toml tests/
+	uv run pytest -c pyproject.toml tests/
 
 check-safety:	## Run safety checks on dependencies
-	poetry run safety check --full-report
+	uv run safety check --full-report
 
 update-dev-deps:	## Update development dependencies to latest versions
-	poetry add -D mypy@latest pre-commit@latest pytest@latest safety@latest coverage@latest pytest-cov@latest
-	poetry run pre-commit autoupdate
+	uv add -D mypy@latest pre-commit@latest pytest@latest safety@latest coverage@latest pytest-cov@latest
+	uv run pre-commit autoupdate
 
 cleanup: ## Cleanup project
 	find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf

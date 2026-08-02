@@ -1,24 +1,17 @@
-# Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
 [build-system]
-requires = ["poetry-core>=2.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[project]
 name = "hyperliquid-python-sdk"
 version = "0.24.0"
 description = "SDK for Hyperliquid API trading with Python."
 readme = "README.md"
-authors = ["Hyperliquid <hello@hyperliquid.xyz>"]
 license = "MIT"
-repository = "https://github.com/hyperliquid-dex/hyperliquid-python-sdk"
-homepage = "https://github.com/hyperliquid-dex/hyperliquid-python-sdk"
-packages = [
-  { include = "hyperliquid" },
-]
-
-# Keywords description https://python-poetry.org/docs/pyproject/#keywords
+authors = [{ name = "Hyperliquid", email = "hello@hyperliquid.xyz" }]
+requires-python = ">=3.9"
+# Keywords description https://packaging.python.org/en/latest/specifications/core-metadata/#keywords
 keywords = []  #! Update me
-
 # Pypi classifiers: https://pypi.org/classifiers/
 classifiers = [  #! Update me
   "Development Status :: 3 - Alpha",
@@ -33,32 +26,39 @@ classifiers = [  #! Update me
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
 ]
+dependencies = [
+  "eth-utils>=2.1.0,<6.0.0",
+  "eth-account>=0.10.0,<0.14.0",
+  "websocket-client>=1.5.1,<2.0.0",
+  "requests>=2.31.0,<3.0.0",
+  "msgpack>=1.0.5,<2.0.0",
+]
 
-[tool.poetry.scripts]
-# Entry points for the package https://python-poetry.org/docs/pyproject/#scripts
+[project.urls]
+repository = "https://github.com/hyperliquid-dex/hyperliquid-python-sdk"
+homepage = "https://github.com/hyperliquid-dex/hyperliquid-python-sdk"
+
+[project.scripts]
+# Entry points for the package
 "hyperliquid-python-sdk" = "hyperliquid.__main__:app"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-eth-utils = ">=2.1.0,<6.0.0"
-eth-account = ">=0.10.0,<0.14.0"
-websocket-client = "^1.5.1"
-requests = "^2.31.0"
-msgpack = "^1.0.5"
+[dependency-groups]
+dev = [
+  "pytest>=8.3.4,<9.0.0",
+  "pytest-recording>=0.13.2,<0.14.0",
+  "mypy>=1.14.1,<2.0.0",
+  "mypy-extensions>=1.0.0,<2.0.0",
+  "pre-commit>=4.1.0,<5.0.0",
+  "safety>=3.2.14,<4.0.0",
+  "coverage>=7.6.10,<8.0.0",
+  "pytest-cov>=6.0.0,<7.0.0",
+  "vcrpy>=7.0.0,<8.0.0; python_version == '3.10.10'",
+  "types-requests>=2.31.0,<3.0.0",
+  "lz4>=4.3,<5.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-python = "^3.10"
-pytest = "^8.3.4"
-pytest-recording = "^0.13.2"
-mypy = "^1.14.1"
-mypy-extensions = "^1.0.0"
-pre-commit = "^4.1.0"
-safety = "^3.2.14"
-coverage = "^7.6.10"
-pytest-cov = "^6.0.0"
-vcrpy = { version = "^7.0.0", python = "3.10.10" }
-types-requests = "^2.31.0"
-lz4 = "^4.3"
+[tool.hatch.build.targets.wheel]
+packages = ["hyperliquid"]
 
 [tool.black]
 line-length = 120
